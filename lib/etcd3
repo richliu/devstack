@@ -129,6 +129,15 @@ function install_etcd3 {
     if [ ! -f "$ETCD_BIN_DIR/etcd" ]; then
         sudo cp $FILES/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
     fi
+    # work around for etcd unsupport system
+    # only test on arm64/ubuntu 17.04
+    if is_ubuntu ; then
+        if is_arch "aarch64"; then
+	    if UBUNTU_RELEASE_BASE_NUM == 17; then
+	    sudo cp "$FILES/devstack@etcd.service" /etc/systemd/system
+	    fi 
+	fi 
+    fi
 }
 
 # Restore xtrace

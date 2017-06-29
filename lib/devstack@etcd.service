@@ -1,0 +1,15 @@
+
+[Unit]
+After = network.target
+Description = Devstack devstack@etcd.service
+
+[Service]
+LimitNOFILE = 65536
+Restart = on-failure
+Type = notify
+Environment="ETCD_UNSUPPORTED_ARCH=arm64"
+ExecStart = /opt/stack/bin/etcd --name aarch64-1704 --data-dir /opt/stack/data/etcd --initial-cluster-state new --initial-cluster-token etcd-cluster-01 --initial-cluster aarch64-1704=http://10.102.81.13:2380 --initial-advertise-peer-urls http://10.102.81.13:2380 --advertise-client-urls http://10.102.81.13:2379 --listen-peer-urls http://0.0.0.0:2380  --listen-client-urls http://10.102.81.13:2379
+User = root
+
+[Install]
+WantedBy = multi-user.target
