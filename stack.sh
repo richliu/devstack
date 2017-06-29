@@ -59,6 +59,8 @@ unset LANG
 unset LANGUAGE
 LC_ALL=en_US.utf8
 export LC_ALL
+# Support arm64 
+export ETCD_UNSUPPORTED_ARCH=arm64
 
 # Make sure umask is sane
 umask 022
