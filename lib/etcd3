@@ -59,6 +59,16 @@ function start_etcd3 {
     iniset -sudo $unitfile "Service" "Restart" "on-failure"
     iniset -sudo $unitfile "Service" "LimitNOFILE" "65536"
 
+    # work around for etcd unsupport system
+    # only test on arm64/ubuntu 17.04
+    if is_ubuntu ; then
+        if is_arch "aarch64"; then
+	    if UBUNTU_RELEASE_BASE_NUM == 17; then
+	    sudo cp "$FILES/devstack@etcd.service" /etc/systemd/system
+	    fi 
+	fi 
+    fi
+
     $SYSTEMCTL daemon-reload
     $SYSTEMCTL enable $ETCD_SYSTEMD_SERVICE
     $SYSTEMCTL start $ETCD_SYSTEMD_SERVICE
@@ -128,15 +138,6 @@ function install_etcd3 {
     fi
     if [ ! -f "$ETCD_BIN_DIR/etcd" ]; then
         sudo cp $FILES/$ETCD_NAME/etcd $ETCD_BIN_DIR/etcd
-    fi
-    # work around for etcd unsupport system
-    # only test on arm64/ubuntu 17.04
-    if is_ubuntu ; then
-        if is_arch "aarch64"; then
-	    if UBUNTU_RELEASE_BASE_NUM == 17; then
-	    sudo cp "$FILES/devstack@etcd.service" /etc/systemd/system
-	    fi 
-	fi 
     fi
 }
 
